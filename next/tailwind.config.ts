@@ -14,7 +14,7 @@ const config: Config = {
 
 // daisyUI config (themes)
 (config as any).daisyui = {
-  themes: ['fantasy', 'dracula'],
+  themes: ['fantasy'],
 };
 
 export default config;
