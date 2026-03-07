@@ -49,8 +49,19 @@ function Subtle({ children }: { children: React.ReactNode }) {
   return <div className="text-sm text-base-content/60">{children}</div>;
 }
 
-function Chip({ children }: { children: React.ReactNode }) {
-  return <span className="inline-flex items-center rounded-full border border-base-300 bg-base-100 px-2 py-0.5 text-xs">{children}</span>;
+function Chip({ children, tone = 'neutral' }: { children: React.ReactNode; tone?: 'neutral' | 'primary' | 'secondary' | 'accent' }) {
+  const cls =
+    tone === 'primary'
+      ? 'border-primary/30 bg-primary/10 text-primary'
+      : tone === 'secondary'
+        ? 'border-secondary/30 bg-secondary/10 text-secondary'
+        : tone === 'accent'
+          ? 'border-accent/30 bg-accent/10 text-accent'
+          : 'border-base-300 bg-base-100 text-base-content/80';
+
+  return (
+    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs ${cls}`}>{children}</span>
+  );
 }
 
 function ButtonLink({
@@ -111,7 +122,8 @@ export default function HanjaPage({
 
   return (
     <main className="min-h-screen bg-base-200">
-      <div className="mx-auto max-w-6xl px-4 py-8">
+      <div className="bg-gradient-to-b from-primary/15 via-secondary/10 to-base-200">
+        <div className="mx-auto max-w-6xl px-4 py-8">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <H1>한자 1800</H1>
@@ -119,11 +131,11 @@ export default function HanjaPage({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Chip>
+            <Chip tone="primary">
               page {page}/{totalPages}
             </Chip>
-            <Chip>pageSize {pageSize}</Chip>
-            <Link href="/" className="text-sm underline decoration-base-content/30 underline-offset-4 hover:decoration-base-content/70">
+            <Chip tone="secondary">pageSize {pageSize}</Chip>
+            <Link href="/" className="link link-hover text-sm">
               홈
             </Link>
           </div>
@@ -155,7 +167,7 @@ export default function HanjaPage({
             return (
               <article
                 key={`${it.hanja}-${num}`}
-                className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-sm"
+                className="rounded-2xl border border-base-300 bg-base-100 p-4 shadow-sm hover:shadow-md transition-shadow"
               >
                 <div className="flex items-baseline justify-between gap-4">
                   <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -163,24 +175,28 @@ export default function HanjaPage({
                     <div className="text-sm">
                       {it.meaning ?? ''} {it.reading ? `(${it.reading})` : ''}
                     </div>
-                    {it.source ? <Chip>{it.source}</Chip> : null}
+                    {it.source ? <Chip tone="accent">{it.source}</Chip> : null}
                   </div>
                   <div className="text-xs text-base-content/50">#{num}</div>
                 </div>
 
                 <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <Chip>총획 {it.naverMeta?.strokeCount ?? '?'}</Chip>
-                  <Chip>
+                  <Chip tone="primary">총획 {it.naverMeta?.strokeCount ?? '?'}</Chip>
+                  <Chip tone="secondary">
                     부수 {it.naverMeta?.radical ?? '?'}{' '}
                     {it.naverMeta?.radicalKoreanName ? `(${it.naverMeta.radicalKoreanName})` : ''}
                   </Chip>
-                  {it.meta?.radicalNumber ? <Chip>KX {it.meta.radicalNumber}.{it.meta.residualStrokes ?? '?'}</Chip> : null}
+                  {it.meta?.radicalNumber ? (
+                    <Chip>
+                      KX {it.meta.radicalNumber}.{it.meta.residualStrokes ?? '?'}
+                    </Chip>
+                  ) : null}
                   {it.expStrokeAnimation ? (
                     <a
                       href={it.expStrokeAnimation}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs underline decoration-base-content/30 underline-offset-4 hover:decoration-base-content/70"
+                      className="link link-hover text-xs"
                     >
                       획순 SVG
                     </a>
@@ -216,6 +232,7 @@ export default function HanjaPage({
             {data.start}–{data.end} / {data.total.toLocaleString()}
           </footer>
         ) : null}
+        </div>
       </div>
     </main>
   );
