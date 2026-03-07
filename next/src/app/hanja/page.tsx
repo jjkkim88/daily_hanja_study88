@@ -67,21 +67,23 @@ function Chip({ children, tone = 'neutral' }: { children: React.ReactNode; tone?
 function ButtonLink({
   href,
   disabled,
+  tone = 'neutral',
   children,
 }: {
   href: any;
   disabled?: boolean;
+  tone?: 'neutral' | 'primary' | 'secondary';
   children: React.ReactNode;
 }) {
+  const toneCls =
+    tone === 'primary'
+      ? 'btn-primary'
+      : tone === 'secondary'
+        ? 'btn-secondary'
+        : 'btn-ghost';
+
   return (
-    <Link
-      href={href}
-      className={`inline-flex items-center justify-center rounded-lg border px-3 py-2 text-sm transition ${
-        disabled
-          ? 'pointer-events-none border-base-200 bg-base-200 text-base-content/30'
-          : 'border-base-300 bg-base-100 hover:bg-base-200'
-      }`}
-    >
+    <Link href={href} className={`btn btn-sm ${toneCls} ${disabled ? 'btn-disabled' : ''}`}>
       {children}
     </Link>
   );
@@ -122,7 +124,7 @@ export default function HanjaPage({
 
   return (
     <main className="min-h-screen bg-base-200">
-      <div className="bg-gradient-to-b from-primary/15 via-secondary/10 to-base-200">
+      <div className="bg-gradient-to-b from-primary/30 via-secondary/20 to-base-200">
         <div className="mx-auto max-w-6xl px-4 py-8">
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -135,23 +137,23 @@ export default function HanjaPage({
               page {page}/{totalPages}
             </Chip>
             <Chip tone="secondary">pageSize {pageSize}</Chip>
-            <Link href="/" className="link link-hover text-sm">
+            <Link href="/" className="link link-hover link-primary text-sm">
               홈
             </Link>
           </div>
         </header>
 
         <nav className="mt-4 flex flex-wrap gap-2">
-          <ButtonLink href={mkHref(1)} disabled={page === 1}>
+          <ButtonLink href={mkHref(1)} disabled={page === 1} tone="secondary">
             처음
           </ButtonLink>
-          <ButtonLink href={mkHref(page - 1)} disabled={page === 1}>
+          <ButtonLink href={mkHref(page - 1)} disabled={page === 1} tone="secondary">
             이전
           </ButtonLink>
-          <ButtonLink href={mkHref(page + 1)} disabled={page === totalPages}>
+          <ButtonLink href={mkHref(page + 1)} disabled={page === totalPages} tone="primary">
             다음
           </ButtonLink>
-          <ButtonLink href={mkHref(totalPages)} disabled={page === totalPages}>
+          <ButtonLink href={mkHref(totalPages)} disabled={page === totalPages} tone="primary">
             끝
           </ButtonLink>
         </nav>
