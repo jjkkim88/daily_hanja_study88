@@ -75,15 +75,20 @@ function ButtonLink({
   tone?: 'neutral' | 'primary' | 'secondary';
   children: React.ReactNode;
 }) {
+  const base =
+    'inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-medium transition shadow-sm border';
+
   const toneCls =
     tone === 'primary'
-      ? 'btn-primary'
+      ? 'border-indigo-200 bg-indigo-600 text-white hover:bg-indigo-700'
       : tone === 'secondary'
-        ? 'btn-secondary'
-        : 'btn-ghost';
+        ? 'border-fuchsia-200 bg-fuchsia-600 text-white hover:bg-fuchsia-700'
+        : 'border-base-300 bg-base-100 hover:bg-base-200';
+
+  const disabledCls = disabled ? 'pointer-events-none opacity-40 shadow-none' : '';
 
   return (
-    <Link href={href} className={`btn btn-sm ${toneCls} ${disabled ? 'btn-disabled' : ''}`}>
+    <Link href={href} className={`${base} ${toneCls} ${disabledCls}`}>
       {children}
     </Link>
   );
@@ -137,7 +142,7 @@ export default function HanjaPage({
               page {page}/{totalPages}
             </Chip>
             <Chip tone="secondary">pageSize {pageSize}</Chip>
-            <Link href="/" className="link link-hover link-primary text-sm">
+            <Link href="/" className="text-sm font-medium text-indigo-700 hover:text-indigo-900">
               홈
             </Link>
           </div>
